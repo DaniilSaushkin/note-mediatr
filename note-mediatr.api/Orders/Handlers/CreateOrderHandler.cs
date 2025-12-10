@@ -1,13 +1,14 @@
 ﻿using MediatR;
-using note_mediatr.api.Commands;
 using note_mediatr.api.Dto;
+using note_mediatr.api.Orders.Commands;
+using note_mediatr.api.Repositories;
 
-namespace note_mediatr.api.Handlers
+namespace note_mediatr.api.Orders.Handlers
 {
-    public class CreateOrderHandler(Database.Database database, IMediator mediator) : 
+    public class CreateOrderHandler(OrderRepository orderRepository, IMediator mediator) :
         IRequestHandler<CreateOrderCommand, Order>
     {
-        private readonly Database.Database _database = database;
+        private readonly OrderRepository _orderRepository = orderRepository;
         private readonly IMediator _mediator = mediator;
 
         public async Task<Order> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -24,7 +25,7 @@ namespace note_mediatr.api.Handlers
                 CreatedAt = DateTime.UtcNow,
             };
 
-            _database.Create(order);
+            _orderRepository.Create(order);
             await _mediator.Publish(new Notifications.OrderCreatedNotification(order.Id, order.CustomerName), cancellationToken);
 
             return order;

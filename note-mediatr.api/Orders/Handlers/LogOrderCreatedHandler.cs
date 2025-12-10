@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using note_mediatr.api.Notifications;
+using note_mediatr.api.Orders.Notifications;
 
-namespace note_mediatr.api.Handlers
+namespace note_mediatr.api.Orders.Handlers
 {
     public class LogOrderCreatedHandler(ILogger<LogOrderCreatedHandler> logger) : INotificationHandler<OrderCreatedNotification>
     {

@@ -1,17 +1,16 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using note_mediatr.api.Commands;
 using note_mediatr.api.Dto;
-using note_mediatr.api.Queries;
+using note_mediatr.api.Orders.Commands;
+using note_mediatr.api.Orders.Queries;
 
 namespace note_mediatr.api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrderController : ControllerBase
+    public class OrderController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public OrderController(IMediator mediator) => _mediator = mediator;
+        private readonly IMediator _mediator = mediator;
 
         [HttpPost]
         public async Task<Order> CreateOrder(

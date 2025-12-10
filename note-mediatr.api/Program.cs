@@ -1,3 +1,5 @@
+using note_mediatr.api.Repositories;
+
 namespace note_mediatr.api
 {
     public class Program
@@ -10,10 +12,16 @@ namespace note_mediatr.api
             {
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
             });
+            
             builder.Services.AddTransient(typeof(MediatR.IPipelineBehavior<,>), typeof(Behaviors.LoggingBehavior<,>));
-            builder.Services.AddControllers();
-            builder.Services.AddSingleton<Database.Database, Database.Database>();
+            builder.Services.AddTransient(typeof(MediatR.IPipelineBehavior<,>), typeof(Behaviors.ValidationBehavior<,>));
 
+            builder.Services.AddSingleton<Database.Database, Database.Database>();
+            builder.Services.AddScoped<OrderRepository, OrderRepository>();
+            builder.Services.AddScoped<ProductRepository, ProductRepository>();
+
+            builder.Services.AddControllers();
+            
             var app = builder.Build();
 
             app.MapControllers();
